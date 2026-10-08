@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<title>Laporan Harian Kepala Ruangan</title>
+<style>
+:root{--ink:#0f2e3d;--mut:#4f6b78;--teal:#1565d8;--mint:#e3f8ec;--grn:#22c55e;--gd:#16b364;--bg:#ffffff;--line:#e3ebf5;--or:#f59e0b;--pu:#7c4dff;--cy:#06b6d4;--sh:0 2px 12px rgba(21,101,216,.09);--red:#c4452d;--amb:#b7791f;--w:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:70px}
+header{background:var(--w);box-shadow:var(--sh);color:var(--ink);padding:calc(8px + env(safe-area-inset-top)) 16px 8px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:4px solid var(--grn)}
+header img{height:42px;width:auto;display:block}header h1{font-size:17px;margin:0;flex:1;min-width:170px;line-height:1.25;color:var(--teal);padding-left:14px;border-left:1px solid var(--line)}header small{display:block;font-weight:400;color:var(--mut);font-size:12px}
+.hb{font:inherit;font-size:13px;font-weight:700;border:0;border-radius:8px;padding:8px 14px;color:#fff;cursor:pointer;background:var(--teal)}.hb.g{background:var(--gd)}
+#pill{font-size:12px;padding:5px 11px;border-radius:99px;background:#f3f6fa;border:1px solid var(--line);color:var(--mut);font-weight:600;cursor:pointer}#pill:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--grn);margin-right:6px}
+#pill.bad{color:#b4321c;background:#fdeceb}#pill.bad:before{background:var(--red)}#pill.wait{color:#8a5a00;background:#fff6e0}#pill.wait:before{background:var(--or)}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--w);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:5}
+nav button{flex:1;border:0;background:none;padding:13px 4px;font:inherit;font-weight:600;color:var(--mut);border-top:3px solid transparent}
+nav button.on{color:var(--teal);border-top-color:var(--teal)}
+main{max-width:1000px;margin:0 auto;padding:14px}section{display:none}section.on{display:block}
+h2{font-size:16px;margin:20px 0 8px;padding-bottom:4px;color:var(--teal);border-bottom:2px solid var(--grn)}
+.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+input,select,textarea,button.b{font:inherit;color:inherit}
+input:not([type=radio]),select,textarea{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--w);margin-top:3px}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--teal);outline-offset:1px}
+label{display:block;font-size:13px;color:var(--mut);font-weight:600}
+.bar input[type=date]{width:auto}
+.b{padding:10px 16px;border-radius:8px;border:1px solid var(--teal);background:var(--teal);color:#fff;font-weight:600;cursor:pointer}.b.o{background:var(--w);color:var(--teal)}
+.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px}
+.sum div{--c:var(--teal);background:var(--w);border:1px solid var(--line);border-top:4px solid var(--c);border-radius:12px;box-shadow:var(--sh);padding:10px 12px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--mut)}.sum b{display:block;font-size:30px;line-height:1.15;font-weight:800;letter-spacing:0;color:var(--c)}.sum small{display:block;font-size:12px;font-weight:400;letter-spacing:0;text-transform:none}
+.sum div:nth-child(2){--c:var(--gd)}.sum div:nth-child(3){--c:var(--or)}.sum div:nth-child(4){--c:var(--pu)}.sum div:nth-child(5){--c:var(--cy)}.sum div:nth-child(6){--c:#e11d74}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.tile{text-align:left;background:var(--w);border:1px solid var(--line);border-top:4px solid var(--line);border-radius:12px;box-shadow:var(--sh);padding:10px 12px;cursor:pointer;font:inherit;color:inherit}
+.tile.ok{border-top-color:var(--grn)}.tile.warn{border-top-color:var(--or)}.tile.none{box-shadow:none;border-style:dashed;border-top-style:solid;color:var(--mut)}
+.tile b{font-size:16px}.tile .st{font-size:12px;color:var(--mut);margin:2px 0 6px}
+.tile .n{display:flex;gap:14px;font-size:13px}.tile .n span b{font-size:15px}
+.chips{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}.chip{font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;background:#fff1d6;color:#9a5b00}
+.row2{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+fieldset{border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:6px 10px;background:var(--w)}legend{font-size:13px;font-weight:700;padding:0 4px}
+.ch{display:inline-flex;align-items:center;gap:6px;margin:4px 14px 4px 0;font-size:14px;color:var(--ink);font-weight:500}
+.ch input{width:18px;height:18px;margin:0}
+.card{box-shadow:var(--sh);background:var(--w);border:1px solid var(--line);border-radius:12px;padding:12px;margin:8px 0}
+.shift{border-left:4px solid var(--grn)}output{font-weight:700;color:var(--teal)}
+.li{display:flex;justify-content:space-between;gap:8px;width:100%;text-align:left;background:var(--w);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:6px 0;font:inherit;color:inherit;cursor:pointer}
+.li small{color:var(--mut)}.tag{font-size:11px;font-weight:700;color:var(--amb)}
+dialog{width:min(640px,94vw);border:0;border-radius:8px;padding:16px}dialog::backdrop{background:#0008}
+pre{white-space:pre-wrap;font:inherit;max-height:60vh;overflow:auto;margin:0 0 12px}
+#toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9}#toast.on{opacity:1}
+.hint{font-size:13px;color:var(--mut)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<header><img src="logo.png" alt="Surya Husadha"><h1>Laporan Harian Kepala Ruangan<small>Dashboard ruang rawat</small></h1><button id="pill" aria-live="polite"></button><button class="hb" id="hf">+ Isi laporan</button><button class="hb g" id="hs">Sinkron</button></header>
+<main>
+<section id="v-dash" class="on">
+ <div class="bar"><label>Tanggal<input type="date" id="dd"></label><button class="b o" id="today">Hari ini</button></div>
+ <div class="sum" id="sum"></div><div class="grid" id="grid"></div>
+</section>
+<section id="v-form"><form id="f"></form></section>
+<section id="v-riw"><div class="bar"><label>Ruang<select id="rf"></select></label></div><div id="rl"></div></section>
+<section id="v-set">
+ <h2>Sinkron ke Google Drive</h2>
+ <label>URL Web App (Apps Script)<input id="cu" placeholder="https://script.google.com/macros/s/.../exec"></label>
+ <label>Kode rahasia<input id="ct" type="password" autocomplete="off"></label>
+ <h2>Bawaan perangkat ini</h2>
+ <div class="row2"><label>Nama kepala ruangan<input id="ck"></label><label>Ruang<select id="cr"></select></label></div>
+ <p><button class="b" id="cs">Simpan &amp; sinkron</button></p>
+ <p class="hint" id="se"></p>
+ <p class="hint">Untuk memasang: buka menu browser lalu pilih "Tambahkan ke layar utama" / "Install app".</p>
+</section>
+</main>
+<nav><button data-v="dash" class="on">Dashboard</button><button data-v="form">Isi laporan</button><button data-v="riw">Riwayat</button><button data-v="set">Pengaturan</button></nav>
+<dialog id="dlg"><pre id="dt"></pre><div class="bar"><button class="b" id="de">Ubah</button><button class="b o" id="dc">Salin teks</button><button class="b o" id="dx">Tutup</button></div></dialog>
+<div id="toast"></div>
+<script>
+const RUANG=["Ruang Bayi","Ruang Gambuh A","Ruang Gambuh B","Ruang Gambuh C","Ruang HD","Ruang IGD","Ruang Intensif","Ruang Lantai 3","Ruang Lantai 4","Ruang OK","Ruang Poliklinik","Ruang VK"];
+const SH=[["pagi","Pagi","07.30-13.30"],["sore","Sore","13.30-19.30"],["malam","Malam","19.30-07.30"]];
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const LS=k=>{try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}};
+const S={cfg:LS("cfg")||{url:"",token:"",kepala:"",ruang:""},local:LS("local")||{},remote:LS("remote")||{},queue:LS("queue")||[],err:""};
+const persist=()=>["cfg","local","remote","queue"].forEach(k=>localStorage.setItem(k,JSON.stringify(S[k])));
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const iso=d=>new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
+const tglID=t=>new Date(t+"T00:00").toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+const v=x=>x===undefined||x===""||x===null?"-":x;
+const toast=m=>{const t=$("#toast");t.textContent=m;t.className="on";setTimeout(()=>t.className="",2400)};
+const all=()=>{const m={...S.remote};for(const k in S.local)if(!m[k]||(S.local[k].ts||0)>=(m[k].ts||0))m[k]=S.local[k];return m};
+
+/* ---------- Form ---------- */
+const N=(n,l)=>`<label>${l}<input type="number" min="0" inputmode="numeric" name="${n}"></label>`;
+const T=(n,l,x="")=>`<label>${l}<input name="${n}" ${x}></label>`;
+const A=(n,l)=>`<label>${l}<textarea name="${n}" rows="3"></textarea></label>`;
+const R=(n,l,o)=>`<fieldset><legend>${l}</legend>${o.map(x=>`<label class="ch"><input type="radio" name="${n}" value="${x}">${x}</label>`).join("")}</fieldset>`;
+const ST=["Ideal","Kurang Tenaga","Berlebih"];
+function buildForm(){
+ $("#f").innerHTML=`<h2>Identitas</h2><div class="row2">${T("tanggal","Hari / Tanggal",'type="date" required')}${T("kepala","Nama Kepala Ruangan",'required')}
+ <label>Ruang Rawat Inap<select name="ruang" required>${RUANG.map(r=>`<option>${r}</option>`).join("")}</select></label>
+ ${T("metode","Metode Asuhan Keperawatan",'list="mt"')}</div><datalist id="mt"><option>Tim<option>Primer<option>Fungsional<option>Modular</datalist>
+ <h2>I. Data situasional &amp; ketenagaan</h2><b>1. Sensus mutasi pasien</b>
+ ${SH.map(([k,l,t])=>`<div class="card shift"><b>${l}</b> <span class="hint">(${t})</span><div class="row2">${N(k+".masuk","Pasien masuk baru")}${N(k+".pulang","Pulang (BPL/APS/Meninggal)")}${N(k+".rujuk","Pasien rujuk")}${N(k+".total","Total pasien akhir shift")}${N(k+".tt","Kapasitas TT")}</div><p>BOR: <output id="bor-${k}">-</output></p></div>`).join("")}
+ <b>2. Klasifikasi tingkat ketergantungan</b><div class="row2">${N("kg.minimal","Minimal care")}${N("kg.partial","Partial care")}${N("kg.total","Total care")}</div>
+ <b>3. Kecukupan tenaga</b>
+ ${SH.map(([k,l])=>`<div class="card shift"><b>Dinas ${l}</b><div class="row2">${N("tn."+k+".ketua","PPJA / Ketua tim")}${N("tn."+k+".pelaksana","Perawat pelaksana")}</div>${R("tn."+k+".status","Status ketenagaan",ST)}${T("tn."+k+".ket","Keterangan")}</div>`).join("")}
+ <h2>II. Fungsi manajemen kepala ruangan</h2>
+ ${[["planning","Planning (perencanaan)"],["organizing","Organizing (pengorganisasian)"],["directing","Directing (pengarahan)"],["controlling","Controlling (pengawasan dan audit)"],["evaluating","Evaluating (evaluasi)"]].map(([k,l])=>A("mj."+k,l+" - kegiatan")).join("")}
+ <h2>III. Monitoring sasaran keselamatan pasien</h2>
+ ${R("skp.s1","SKP 1 Identifikasi pasien",["100%","<100%"])}${R("skp.s2","SKP 2 Komunikasi efektif",["Ya","Tidak"])}${R("skp.s3","SKP 3 High-alert medications",["Ya","Tidak"])}${R("skp.s5","SKP 5 Pencegahan infeksi / HAIs",["Patuh","Cukup","Kurang"])}${R("skp.s6","SKP 6 Risiko jatuh",["Terpasang","Tidak Ada Pasien Risiko"])}
+ <h2>IV. Masalah khusus &amp; rencana tindak lanjut</h2>${A("masalah","Masalah klinis / manajerial")}${A("rtl","Rencana tindak lanjut (RTL)")}
+ <h2>V. Fasilitas alkes dan non alkes</h2>
+ <div class="card"><b>Alkes</b>${A("alkes.kondisi","Kondisi")}${A("alkes.masalah","Masalah")}</div>
+ <div class="card"><b>Non alkes</b>${A("nonalkes.kondisi","Kondisi")}${A("nonalkes.masalah","Masalah")}</div>
+ <p><button class="b" type="submit">Simpan laporan</button> <button class="b o" type="button" id="rs">Kosongkan</button></p>`;
+ $("#rs").onclick=()=>fillForm({});
+ $("#f").oninput=calcBor;
+}
+const setP=(o,p,x)=>{const a=p.split(".");a.slice(0,-1).forEach(k=>o=o[k]=o[k]||{});o[a.pop()]=x};
+const getP=(o,p)=>p.split(".").reduce((a,k)=>a&&a[k],o);
+function calcBor(){SH.forEach(([k])=>{const t=+$(`[name="${k}.total"]`).value,c=+$(`[name="${k}.tt"]`).value;$("#bor-"+k).textContent=c>0&&$(`[name="${k}.total"]`).value!==""?Math.round(t/c*100)+"%":"-"})}
+function collect(){const r={};$$("#f [name]").forEach(e=>{if(e.type==="radio"){if(e.checked)setP(r,e.name,e.value)}else if(e.value!=="")setP(r,e.name,e.type==="number"?+e.value:e.value.trim())});
+ SH.forEach(([k])=>{const x=(r[k]=r[k]||{});if(x.tt>0&&x.total!==undefined)x.bor=Math.round(x.total/x.tt*100)});r.ts=Date.now();return r}
+function fillForm(r){$$("#f [name]").forEach(e=>{const x=getP(r,e.name);if(e.type==="radio")e.checked=x===e.value;else e.value=x??""});
+ if(!r.tanggal)$('[name="tanggal"]').value=$("#dd").value;if(!r.kepala)$('[name="kepala"]').value=S.cfg.kepala||"";if(!r.ruang)$('[name="ruang"]').value=S.cfg.ruang||RUANG[0];calcBor()}
+function openForm(r){go("form");fillForm(r||{});scrollTo(0,0)}
+
+/* ---------- Ringkasan & teks ---------- */
+function last(r){for(const k of ["malam","sore","pagi"])if(r[k]&&r[k].total!==undefined)return r[k];return {}}
+function ring(r){const l=last(r),st=SH.map(([k])=>getP(r,"tn."+k+".status")).filter(Boolean);return{pasien:l.total??"",bor:l.bor??"",tenaga:st.includes("Kurang Tenaga")?"Kurang Tenaga":st.length?"Ideal/Berlebih":""}}
+function flags(r){const f=[],k=r.skp||{};if(ring(r).tenaga==="Kurang Tenaga")f.push("Kurang tenaga");
+ if(k.s1==="<100%"||k.s2==="Tidak"||k.s3==="Tidak"||k.s5==="Cukup"||k.s5==="Kurang")f.push("SKP");
+ if(r.masalah)f.push("Masalah");if(getP(r,"alkes.masalah")||getP(r,"nonalkes.masalah"))f.push("Alkes/Non alkes");return f}
+function toText(r){const L=[],P=x=>L.push(x),m=r.mj||{},k=r.skp||{};
+ P("# LAPORAN HARIAN KEPALA RUANGAN");P("RSU SURYA HUSADHA");P("Hari / Tanggal: "+tglID(r.tanggal));P("Nama Kepala Ruangan: "+v(r.kepala));P("Ruang Rawat Inap: "+r.ruang);P("Metode Asuhan Keperawatan: "+v(r.metode));
+ P("# I. DATA SITUASIONAL & MANAJEMEN KETENAGAAN (STAFFING)");P("1. Sensus Mutasi Pasien");
+ SH.forEach(([s,l,t])=>{const x=r[s]||{};P(`${l} (${t})`);P(`- Pasien masuk baru: ${v(x.masuk)} orang`);P(`- Pasien pulang (BPL/APS/Meninggal): ${v(x.pulang)} orang`);P(`- Pasien rujuk: ${v(x.rujuk)} orang`);P(`- Total pasien akhir shift: ${v(x.total)} orang`);P(`- Kapasitas TT / BOR: ${v(x.tt)} TT / ${v(x.bor)} %`)});
+ const g=r.kg||{};P("2. Klasifikasi Tingkat Ketergantungan Pasien");P(`- Minimal care: ${v(g.minimal)} orang`);P(`- Partial care: ${v(g.partial)} orang`);P(`- Total care: ${v(g.total)} orang`);
+ P("3. Kecukupan Tenaga (Rasio Ketenagaan)");SH.forEach(([s,l])=>{const x=(r.tn||{})[s]||{};P(`Dinas ${l}: Ketua tim ${v(x.ketua)} orang, Perawat pelaksana ${v(x.pelaksana)} orang`);P(`- Status: ${v(x.status)}`);P(`- Keterangan: ${v(x.ket)}`)});
+ P("# II. IMPLEMENTASI FUNGSI MANAJEMEN KEPALA RUANGAN");[["planning","PLANNING"],["organizing","ORGANIZING"],["directing","DIRECTING"],["controlling","CONTROLLING"],["evaluating","EVALUATING"]].forEach(([a,b])=>{P(b);P("Kegiatan: "+v(m[a]))});
+ P("# III. MONITORING SASARAN KESELAMATAN PASIEN (SKP)");P("SKP 1 Identifikasi Pasien: "+v(k.s1));P("SKP 2 Komunikasi Efektif: "+v(k.s2));P("SKP 3 High-Alert Medications: "+v(k.s3));P("SKP 5 Pencegahan Infeksi/HAIs: "+v(k.s5));P("SKP 6 Risiko Jatuh: "+v(k.s6));
+ P("# IV. MASALAH KHUSUS & RENCANA TINDAK LANJUT (RTL)");P("Masalah Klinis/Manajerial: "+v(r.masalah));P("RTL: "+v(r.rtl));
+ P("# V. LAPORAN FASILITAS ALKES DAN NONALKES");P("ALKES - Kondisi: "+v(getP(r,"alkes.kondisi")));P("ALKES - Masalah: "+v(getP(r,"alkes.masalah")));P("NON ALKES - Kondisi: "+v(getP(r,"nonalkes.kondisi")));P("NON ALKES - Masalah: "+v(getP(r,"nonalkes.masalah")));
+ return L.join("\n")}
+
+/* ---------- Dashboard ---------- */
+function renderDash(){const d=$("#dd").value,M=all(),rs=RUANG.map(n=>M[d+"|"+n]).filter(Boolean);
+ const sum=f=>rs.reduce((a,r)=>a+(+f(r)||0),0),bors=rs.map(r=>last(r).bor).filter(x=>x!==undefined);
+ $("#sum").innerHTML=[["Sudah lapor",rs.length+" / "+RUANG.length,"ruang hari ini"],["Total pasien",sum(r=>last(r).total),"akhir shift terakhir"],["Rata-rata BOR",bors.length?Math.round(bors.reduce((a,b)=>a+b,0)/bors.length)+"%":"-","ruang yang lapor"],["Ketergantungan",[sum(r=>r.kg?.minimal),sum(r=>r.kg?.partial),sum(r=>r.kg?.total)].join("/"),"minimal / partial / total"],["Kurang tenaga",rs.filter(r=>ring(r).tenaga==="Kurang Tenaga").length,"ruang"],["Perlu perhatian",rs.filter(r=>flags(r).length).length,"ruang"]].map(([a,b,c])=>`<div>${a}<b>${b}</b><small>${c}</small></div>`).join("");
+ $("#grid").innerHTML=RUANG.map(n=>{const r=M[d+"|"+n];if(!r)return`<button class="tile none" data-k="${esc(d+"|"+n)}"><b>${n}</b><div class="st">Belum ada laporan</div><span class="hint">Ketuk untuk mengisi</span></button>`;
+  const f=flags(r),l=last(r);return`<button class="tile ${f.length?"warn":"ok"}" data-k="${esc(d+"|"+n)}"><b>${n}</b><div class="st">${esc(v(r.kepala))}${S.queue.includes(d+"|"+n)?" · belum terkirim":""}</div><div class="n"><span><b>${v(l.total)}</b> pasien</span><span>BOR <b>${v(l.bor)}${l.bor!==undefined?"%":""}</b></span></div><div class="chips">${f.map(x=>`<span class="chip">${x}</span>`).join("")}</div></button>`}).join("")}
+$("#grid").onclick=e=>{const t=e.target.closest(".tile");if(!t)return;const k=t.dataset.k,r=all()[k];if(r)show(r);else{const[tg,ru]=k.split("|");openForm({tanggal:tg,ruang:ru})}};
+
+/* ---------- Riwayat & detail ---------- */
+function renderRiw(){const f=$("#rf").value,rs=Object.values(all()).filter(r=>!f||r.ruang===f).sort((a,b)=>(b.tanggal+b.ruang).localeCompare(a.tanggal+a.ruang));
+ $("#rl").innerHTML=rs.length?rs.map(r=>`<button class="li" data-k="${esc(r.tanggal+"|"+r.ruang)}"><span><b>${esc(r.ruang)}</b><br><small>${tglID(r.tanggal)} · ${esc(v(r.kepala))}</small></span>${S.queue.includes(r.tanggal+"|"+r.ruang)?'<span class="tag">Menunggu kirim</span>':""}</button>`).join(""):'<p class="hint">Belum ada laporan.</p>'}
+$("#rl").onclick=e=>{const t=e.target.closest(".li");if(t)show(all()[t.dataset.k])};
+let cur=null;const show=r=>{cur=r;$("#dt").textContent=toText(r);$("#dlg").showModal()};
+$("#dx").onclick=()=>$("#dlg").close();$("#de").onclick=()=>{$("#dlg").close();openForm(cur)};
+$("#dc").onclick=()=>navigator.clipboard.writeText(toText(cur)).then(()=>toast("Teks disalin"));
+
+/* ---------- Sinkron ke Drive ---------- */
+async function sync(){pill();if(!S.cfg.url||!navigator.onLine)return;
+ try{for(const k of [...S.queue]){const r=S.local[k];if(r){const j=await(await fetch(S.cfg.url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({token:S.cfg.token,report:{...r,ringkas:ring(r),teks:toText(r)}})})).json();if(!j.ok)throw j.error}S.queue=S.queue.filter(x=>x!==k);persist()}
+  const from=iso(new Date(Date.now()-60*864e5)),j=await(await fetch(`${S.cfg.url}?action=list&from=${from}&token=${encodeURIComponent(S.cfg.token)}`)).json();if(!j.ok)throw j.error;
+  S.remote={};j.reports.forEach(r=>S.remote[r.tanggal+"|"+r.ruang]=r);S.err="";persist()}
+ catch(e){S.err=typeof e==="string"?e:"Tidak bisa terhubung ke Apps Script"}
+ pill();render()}
+function pill(){const p=$("#pill");let t="Tersinkron ke Drive",c="";
+ if(!S.cfg.url){t="Drive belum diatur";c="wait"}else if(S.err){t="Gagal sinkron";c="bad"}else if(S.queue.length){t=S.queue.length+" menunggu kirim";c="wait"}else if(!navigator.onLine)t="Offline";
+ p.textContent=t;p.className=c;$("#se").textContent=S.err?"Galat: "+S.err:""}
+$("#pill").onclick=()=>S.cfg.url?sync():go("set");$("#hs").onclick=$("#pill").onclick;$("#hf").onclick=()=>{go("form");if(!$("#f [name=kepala]").value)fillForm(collect())};
+
+/* ---------- Navigasi & init ---------- */
+const render=()=>{renderDash();renderRiw()};
+function go(v){$$("section").forEach(s=>s.classList.toggle("on",s.id==="v-"+v));$$("nav button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));if(v!=="form")render()}
+$$("nav button").forEach(b=>b.onclick=()=>{go(b.dataset.v);if(b.dataset.v==="form"&&!$("#f [name=kepala]").value)fillForm(collect())});
+$("#f").onsubmit=e=>{e.preventDefault();const r=collect(),k=r.tanggal+"|"+r.ruang;S.local[k]=r;if(!S.queue.includes(k))S.queue.push(k);
+ if(r.kepala){S.cfg.kepala=r.kepala;S.cfg.ruang=r.ruang}persist();$("#dd").value=r.tanggal;toast("Laporan tersimpan");go("dash");sync()};
+$("#dd").value=iso(new Date());$("#dd").onchange=renderDash;$("#today").onclick=()=>{$("#dd").value=iso(new Date());renderDash()};
+$("#rf").innerHTML='<option value="">Semua ruang</option>'+RUANG.map(r=>`<option>${r}</option>`).join("");$("#rf").onchange=renderRiw;
+$("#cr").innerHTML=RUANG.map(r=>`<option>${r}</option>`).join("");
+$("#cu").value=S.cfg.url;$("#ct").value=S.cfg.token;$("#ck").value=S.cfg.kepala||"";$("#cr").value=S.cfg.ruang||RUANG[0];
+$("#cs").onclick=()=>{S.cfg={url:$("#cu").value.trim(),token:$("#ct").value.trim(),kepala:$("#ck").value.trim(),ruang:$("#cr").value};S.err="";persist();toast("Pengaturan disimpan");sync()};
+addEventListener("online",sync);buildForm();fillForm({});render();sync();
+if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
+</script></body></html>
