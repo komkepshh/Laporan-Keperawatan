@@ -43,7 +43,7 @@ fieldset{border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:6px
 .li small{color:var(--mut)}.tag{font-size:11px;font-weight:700;color:var(--amb)}
 dialog{width:min(640px,94vw);border:0;border-radius:8px;padding:16px}dialog::backdrop{background:#0008}
 pre{white-space:pre-wrap;font:inherit;max-height:60vh;overflow:auto;margin:0 0 12px}
-#toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9}#toast.on{opacity:1}
+#toast{max-width:90vw;text-align:center;position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9}#toast.on{opacity:1}
 .hint{font-size:13px;color:var(--mut)}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style></head><body>
@@ -81,7 +81,7 @@ const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&g
 const iso=d=>new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
 const tglID=t=>new Date(t+"T00:00").toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
 const v=x=>x===undefined||x===""||x===null?"-":x;
-const toast=m=>{const t=$("#toast");t.textContent=m;t.className="on";setTimeout(()=>t.className="",2400)};
+const toast=m=>{const t=$("#toast");t.textContent=m;t.className="on";setTimeout(()=>t.className="",Math.max(2400,m.length*70))};
 const all=()=>{const m={...S.remote};for(const k in S.local)if(!m[k]||(S.local[k].ts||0)>=(m[k].ts||0))m[k]=S.local[k];return m};
 
 /* ---------- Form ---------- */
@@ -159,8 +159,8 @@ async function sync(){pill();if(!S.cfg.url||!navigator.onLine)return;
  try{for(const k of [...S.queue]){const r=S.local[k];if(r){const j=await(await fetch(S.cfg.url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({token:S.cfg.token,report:{...r,ringkas:ring(r),teks:toText(r)}})})).json();if(!j.ok)throw j.error}S.queue=S.queue.filter(x=>x!==k);persist()}
   const from=iso(new Date(Date.now()-60*864e5)),j=await(await fetch(`${S.cfg.url}?action=list&from=${from}&token=${encodeURIComponent(S.cfg.token)}`)).json();if(!j.ok)throw j.error;
   S.remote={};j.reports.forEach(r=>S.remote[r.tanggal+"|"+r.ruang]=r);S.err="";persist()}
- catch(e){S.err=typeof e==="string"?e:"Tidak bisa terhubung ke Apps Script"}
- pill();render()}
+ catch(e){S.err=typeof e==="string"?e:e instanceof SyntaxError?"Apps Script membalas galat. Pastikan script dibuka dari Google Sheet (Extensions > Apps Script) lalu deploy ulang":"Tidak bisa terhubung. Di Deploy, Who has access harus Anyone"}
+ pill();render();if(S.err)toast("Gagal sinkron: "+S.err)}
 function pill(){const p=$("#pill");let t="Tersinkron ke Drive",c="";
  if(!S.cfg.url){t="Drive belum diatur";c="wait"}else if(S.err){t="Gagal sinkron";c="bad"}else if(S.queue.length){t=S.queue.length+" menunggu kirim";c="wait"}else if(!navigator.onLine)t="Offline";
  p.textContent=t;p.className=c;$("#se").textContent=S.err?"Galat: "+S.err:""}
