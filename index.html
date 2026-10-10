@@ -75,7 +75,7 @@ const SH=[["pagi","Pagi","07.30-13.30"],["sore","Sore","13.30-19.30"],["malam","
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const LS=k=>{try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}};
 const S={cfg:LS("cfg")||{url:"",token:"",kepala:"",ruang:""},local:LS("local")||{},remote:LS("remote")||{},queue:LS("queue")||[],err:""};
-if(!S.cfg.url||S.cfg.url.includes("AKfycbxbt6gaBNLn"))S.cfg.url="https://script.google.com/macros/s/AKfycbzBl6xS8gEOgeK9yaiuQemrxn8nO05JjKGoAdb35w8sPYEj1jkCUr03LHERtuR8j4cl/exec";
+if(!S.cfg.url||["AKfycbxbt6gaBNLn","AKfycbzBl6xS8gEO"].some(i=>S.cfg.url.includes(i)))S.cfg.url="https://script.google.com/macros/s/AKfycbxRUlVO7JcPAuKyoiAx9isy0skANvOjHMOb9jKEPq6bOvV2Mkm4-0Qf5GFRjjd39TS7/exec";
 const persist=()=>["cfg","local","remote","queue"].forEach(k=>localStorage.setItem(k,JSON.stringify(S[k])));
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const iso=d=>new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
